@@ -21,7 +21,7 @@ public class AppUserService extends AbstractService<AppUser> implements UserDeta
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         
         return (UserDetails) this.appUserRepository.findByEmail(username).orElseThrow(() ->
-            new IllegalStateException("Could not find app user with email: " + username + "."));
+            new IllegalStateException("Could not find app user with username: " + username + "."));
     }
 
 

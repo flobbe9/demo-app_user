@@ -39,7 +39,12 @@ public class SecurityConfig
                     .permitAll()
                 .anyRequest()
                     .hasRole("USER")
-            );
+            )
+
+            .formLogin(formLogin -> formLogin
+                // .failureUrl("/api/user/login")
+                .loginPage("http://locahost:4000/api/user/login")
+                .permitAll());
 
         return http.build();
     }
