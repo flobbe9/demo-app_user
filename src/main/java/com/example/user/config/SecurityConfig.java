@@ -3,6 +3,8 @@ package com.example.user.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,32 +21,24 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @EnableWebSecurity
-// @EnableWebMvc
-public class SecurityConfig 
-    // implements WebMvcConfigurer
-    {
+@EnableMethodSecurity // for @PreAuthorize
+public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
             .csrf(csrf -> csrf
-                .disable()
-            )
+                .disable())
 
 			.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.GET, "/api/user", "/api/user/addTestUser")
-                    .permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/user/save")
-                    .permitAll()
                 .anyRequest()
-                    .hasRole("USER")
-            )
+                    .permitAll())
 
             .formLogin(formLogin -> formLogin
-                // .failureUrl("/api/user/login")
-                .loginPage("http://locahost:4000/api/user/login")
-                .permitAll());
+                .defaultSuccessUrl("https://demo-ui-do4dkoej7q-ew.a.run.app", false)
+                .loginProcessingUrl("/api/user/login") // has to be the same as post action in login form and use thymeleaf
+                .loginPage("http://localhost:3000/login"));
 
         return http.build();
     }

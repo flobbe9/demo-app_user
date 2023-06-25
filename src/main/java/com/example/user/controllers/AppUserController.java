@@ -2,6 +2,7 @@ package com.example.user.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,7 @@ public class AppUserController {
 
 
     @GetMapping("/test")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String test() {
 
         return "Test. \n This page should have a USER restriction.";
